@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Hard Money Flip Calculator & Checklist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        .result-value {
+            color: #2d3748;
+            font-weight: 700;
+        }
+        
+        .result-value.positive {
+            color: #48bb78;
+        }
+        
+        .result-value.negative {
+            color: #f56565;
+        }
+        
+        .result-value.highlight {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        
+        .checklist {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .checklist h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .checklist-item:hover {
+            background-color: #edf2f7;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checklist-item label {
+            cursor: pointer;
+            color: #4a5568;
+            flex: 1;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: #718096;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .warning {
+            background: #fff5f5;
+            border-left: 4px solid #fc8181;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .info {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .timeline {
+            margin-top: 20px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Ultimate Hard Money Flip Calculator & Checklist</h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('calculator')">Calculator</button>
+            <button class="tab-button" onclick="switchTab('checklist')">Checklist</button>
+            <button class="tab-button" onclick="switchTab('timeline')">Timeline</button>
+        </div>
+        
+        <!-- Calculator Tab -->
+        <div id="calculator" class="tab-content active">
+            <div class="calculator-grid">
+                <!-- Input Section -->
+                <div class="card">
+                    <h2>📊 Deal Parameters</h2>
+                    
+                    <div class="input-group">
+                        <label for="purchasePrice">Purchase Price ($)</label>
+                        <input type="number" id="purchasePrice" value="150000" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="renobudget">Renovation Budget ($)</label>
+                        <input type="number" id="renobudget" value="50000" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="arv">After Repair Value - ARV ($)</label>
+                        <input type="number" id="arv" value="280000" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="interestRate">Interest Rate (%)</label>
+                        <input type="number" id="interestRate" value="10.49" step="0.01" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="downPaymentPercent">Down Payment (%)</label>
+                        <input type="number" id="downPaymentPercent" value="30" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="constructionMonths">Construction Period (Months)</label>
+                        <input type="number" id="constructionMonths" value="6" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="holdingMonths">Additional Holding (Months)</label>
+                        <input type="number" id="holdingMonths" value="2" oninput="calculateAll()">
+                    </div>
+                </div>
+                
+                <!-- Initial Costs -->
+                <div class="card">
+                    <h2>💰 Initial Investment Required</h2>
+                    <div id="initialCosts"></div>
+                    <div class="info">
+                        <strong>Note:</strong> Includes 10% contingency and 25% reserves as per lender requirements
+                    </div>
+                </div>
+                
+                <!-- Monthly Payments -->
+                <div class="card">
+                    <h2>📅 Monthly Payments</h2>
+                    <div id="monthlyPayments"></div>
+                </div>
+                
+                <!-- Flip to Sell Analysis -->
+                <div class="card">
+                    <h2>🏷️ Flip to Sell Analysis</h2>
+                    
+                    <div class="input-group">
+                        <label for="salePrice">Sale Price ($)</label>
+                        <input type="number" id="salePrice" value="280000" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="realtorCommission">Realtor Commission (%)</label>
+                        <input type="number" id="realtorCommission" value="6" step="0.1" oninput="calculateAll()">
+                    </div>
+                    
+                    <div id="flipToSellResults"></div>
+                </div>
+                
+                <!-- Flip to Rent Analysis -->
+                <div class="card">
+                    <h2>🏘️ Flip to Refinance & Rent</h2>
+                    
+                    <div class="input-group">
+                        <label for="monthlyRent">Monthly Rent ($)</label>
+                        <input type="number" id="monthlyRent" value="2200" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="refiLTV">Refinance LTV (%)</label>
+                        <input type="number" id="refiLTV" value="75" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="refiRate">Refinance Rate (%)</label>
+                        <input type="number" id="refiRate" value="7.5" step="0.01" oninput="calculateAll()">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="propertyManagement">Property Management (%)</label>
+                        <input type="number" id="propertyManagement" value="10" oninput="calculateAll()">
+                    </div>
+                    
+                    <div id="flipToRentResults"></div>
+                </div>
+                
+                <!-- All Fees Breakdown -->
+                <div class="card full-width">
+                    <h2>📋 Complete Fee Breakdown</h2>
+                    <div id="feeBreakdown"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Checklist Tab -->
+        <div id="checklist" class="tab-content">
+            <div class="calculator-grid">
+                <div class="card">
+                    <h2>✅ Pre-Purchase Checklist</h2>
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check1">
+                            <label for="check1">Property inspection completed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check2">
+                            <label for="check2">Title search completed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check3">
+                            <label for="check3">Comparable sales analysis (3-5 comps)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check4">
+                            <label for="check4">Contractor bids obtained (minimum 3)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check5">
+                            <label for="check5">Insurance quotes obtained</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check6">
+                            <label for="check6">Hard money lender approved</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check7">
+                            <label for="check7">Proof of funds for down payment + reserves</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check8">
+                            <label for="check8">Environmental/hazard assessments</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check9">
+                            <label for="check9">Zoning verification</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check10">
+                            <label for="check10">ARV appraisal or BPO completed</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>🔨 Renovation Checklist</h2>
+                    <div class="checklist">
+                        <h3>Permits Required</h3>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="permit1">
+                            <label for="permit1">Building permit ($500-$2000)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="permit2">
+                            <label for="permit2">Electrical permit ($200-$500)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="permit3">
+                            <label for="permit3">Plumbing permit ($200-$500)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="permit4">
+                            <label for="permit4">HVAC permit ($200-$400)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="permit5">
+                            <label for="permit5">Roofing permit ($150-$500)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="permit6">
+                            <label for="permit6">Demolition permit ($200-$800)</label>
+                        </div>
+                        
+                        <h3 style="margin-top: 20px;">Renovation Tasks</h3>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reno1">
+                            <label for="reno1">General contractor hired & contract signed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reno2">
+                            <label for="reno2">Detailed scope of work document</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reno3">
+                            <label for="reno3">Materials list & ordering schedule</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reno4">
+                            <label for="reno4">Project timeline with milestones</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reno5">
+                            <label for="reno5">Weekly progress meetings scheduled</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reno6">
+                            <label for="reno6">Change order process established</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>💼 Holding Period Costs</h2>
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hold1">
+                            <label for="hold1">Property insurance active</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hold2">
+                            <label for="hold2">Utilities transferred & active</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hold3">
+                            <label for="hold3">Property taxes current</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hold4">
+                            <label for="hold4">HOA fees paid (if applicable)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hold5">
+                            <label for="hold5">Security system installed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hold6">
+                            <label for="hold6">Lawn maintenance arranged</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>🏪 Exit Strategy Checklist</h2>
+                    <div class="checklist">
+                        <h3>For Flip to Sell</h3>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="sell1">
+                            <label for="sell1">Professional photos scheduled</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="sell2">
+                            <label for="sell2">Staging company hired</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="sell3">
+                            <label for="sell3">Realtor selected & listing agreement signed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="sell4">
+                            <label for="sell4">Pre-listing inspection completed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="sell5">
+                            <label for="sell5">Marketing materials prepared</label>
+                        </div>
+                        
+                        <h3 style="margin-top: 20px;">For Refinance & Rent</h3>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rent1">
+                            <label for="rent1">Refinance lender selected</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rent2">
+                            <label for="rent2">Appraisal ordered for refinance</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rent3">
+                            <label for="rent3">Property management company interviewed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rent4">
+                            <label for="rent4">Rental market analysis completed</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rent5">
+                            <label for="rent5">Lease agreement template prepared</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rent6">
+                            <label for="rent6">Tenant screening process established</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline Tab -->
+        <div id="timeline" class="tab-content">
+            <div class="card full-width">
+                <h2>📅 Project Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content">
+                            <strong>Week 1-2: Due Diligence</strong>
+                            <p>Property inspection, title search, contractor bids, secure financing</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content">
+                            <strong>Week 3: Closing</strong>
+                            <p>Final walkthrough, closing documents, fund transfer, get keys</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content">
+                            <strong>Week 4: Permits & Prep</strong>
+                            <p>Pull permits, order materials, finalize contractor schedule</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-content">
+                            <strong>Weeks 5-8: Structural & Systems</strong>
+                            <p>Foundation, framing, roofing, plumbing, electrical, HVAC rough-in</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">5</div>
+                        <div class="timeline-content">
+                            <strong>Weeks 9-12: Interior Work</strong>
+                            <p>Insulation, drywall, flooring, kitchen, bathrooms</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">6</div>
+                        <div class="timeline-content">
+                            <strong>Weeks 13-16: Finishing Touches</strong>
+                            <p>Paint, fixtures, landscaping, final inspections</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">7</div>
+                        <div class="timeline-content">
+                            <strong>Weeks 17-20: Marketing & Sale</strong>
+                            <p>Photos, staging, listing, showings, negotiate offers</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">8</div>
+                        <div class="timeline-content">
+                            <strong>Weeks 21-24: Closing</strong>
+                            <p>Buyer financing, inspections, final closing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function calculateAll() {
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const renobudget = parseFloat(document.getElementById('renobudget').value) || 0;
+            const arv = parseFloat(document.getElementById('arv').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 10.49;
+            const downPaymentPercent = parseFloat(document.getElementById('downPaymentPercent').value) || 30;
+            const constructionMonths = parseFloat(document.getElementById('constructionMonths').value) || 6;
+            const holdingMonths = parseFloat(document.getElementById('holdingMonths').value) || 2;
+            
+            // Calculate loan amounts
+            const totalProjectCost = purchasePrice + renobudget;
+            const downPayment = totalProjectCost * (downPaymentPercent / 100);
+            const loanAmount = totalProjectCost - downPayment;
+            
+            // During construction: interest only on purchase price portion (80% of purchase)
+            const purchaseLoanAmount = purchasePrice * 0.8; // They loan 80% of purchase
+            const monthlyRate = interestRate / 100 / 12;
+            const constructionPayment = purchaseLoanAmount * monthlyRate;
+            
+            // After construction: interest on full loan
+            const fullLoanPayment = loanAmount * monthlyRate;
+            
+            // Calculate all fees and costs
+            const closingCosts = loanAmount * 0.065; // 6.5% of loan amount
+            const contingency = renobudget * 0.10; // 10% contingency
+            const reserves = loanAmount * 0.25; // 25% reserves required
+            const permits = 2500; // Average permit costs
+            const insurance = purchasePrice * 0.005 * (constructionMonths + holdingMonths); // 0.5% annually
+            const propertyTax = purchasePrice * 0.012 * ((constructionMonths + holdingMonths) / 12); // 1.2% annually
+            const utilities = 200 * (constructionMonths + holdingMonths);
+            const loanOriginationFee = loanAmount * 0.02; // 2% origination
+            const appraisalFee = 500;
+            const inspectionFee = 500;
+            const titleInsurance = purchasePrice * 0.006;
+            const recordingFees = 250;
+            
+            // Total initial investment
+            const totalInitialInvestment = downPayment + closingCosts + contingency + reserves + permits;
+            
+            // Total holding costs
+            const totalInterestPaid = (constructionPayment * constructionMonths) + 
+                                     (fullLoanPayment * holdingMonths);
+            const totalHoldingCosts = totalInterestPaid + insurance + propertyTax + utilities;
+            
+            // Update Initial Costs Display
+            document.getElementById('initialCosts').innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">Down Payment (${downPaymentPercent}%)</span>
+                    <span class="result-value">$${downPayment.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Closing Costs (~6.5%)</span>
+                    <span class="result-value">$${closingCosts.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Contingency (10%)</span>
+                    <span class="result-value">$${contingency.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Required Reserves (25%)</span>
+                    <span class="result-value">$${reserves.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Permits & Fees</span>
+                    <span class="result-value">$${permits.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label"><strong>Total Cash Needed</strong></span>
+                    <span class="result-value highlight"><strong>$${totalInitialInvestment.toFixed(0).toLocaleString()}</strong></span>
+                </div>
+            `;
+            
+            // Update Monthly Payments
+            document.getElementById('monthlyPayments').innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">During Construction</span>
+                    <span class="result-value">$${constructionPayment.toFixed(0).toLocaleString()}/mo</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">After Construction</span>
+                    <span class="result-value">$${fullLoanPayment.toFixed(0).toLocaleString()}/mo</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Interest Paid</span>
+                    <span class="result-value negative">$${totalInterestPaid.toFixed(0).toLocaleString()}</span>
+                </div>
+            `;
+            
+            // Flip to Sell Analysis
+            const salePrice = parseFloat(document.getElementById('salePrice').value) || arv;
+            const realtorCommission = parseFloat(document.getElementById('realtorCommission').value) || 6;
+            const sellingCosts = (salePrice * realtorCommission / 100) + 3000 + 2000; // Commission + staging + misc
+            const totalProjectExpenses = totalProjectCost + totalHoldingCosts + closingCosts + permits;
+            const netProfit = salePrice - loanAmount - totalProjectExpenses - sellingCosts;
+            const roi = (netProfit / totalInitialInvestment) * 100;
+            const totalMonths = constructionMonths + holdingMonths;
+            const annualizedROI = (roi / totalMonths) * 12;
+            
+            document.getElementById('flipToSellResults').innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">Sale Price</span>
+                    <span class="result-value">$${salePrice.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Loan Payoff</span>
+                    <span class="result-value negative">-$${loanAmount.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Selling Costs</span>
+                    <span class="result-value negative">-$${sellingCosts.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Project Cost</span>
+                    <span class="result-value negative">-$${totalProjectExpenses.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label"><strong>Net Profit</strong></span>
+                    <span class="result-value ${netProfit > 0 ? 'positive' : 'negative'}"><strong>$${netProfit.toFixed(0).toLocaleString()}</strong></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">ROI</span>
+                    <span class="result-value ${roi > 0 ? 'positive' : 'negative'}">${roi.toFixed(1)}%</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Annualized ROI</span>
+                    <span class="result-value ${annualizedROI > 0 ? 'positive' : 'negative'}">${annualizedROI.toFixed(1)}%</span>
+                </div>
+            `;
+            
+            // Flip to Rent Analysis
+            const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 2200;
+            const refiLTV = parseFloat(document.getElementById('refiLTV').value) || 75;
+            const refiRate = parseFloat(document.getElementById('refiRate').value) || 7.5;
+            const propertyManagement = parseFloat(document.getElementById('propertyManagement').value) || 10;
+            
+            const refiAmount = arv * (refiLTV / 100);
+            const cashOutAtRefi = refiAmount - loanAmount;
+            const refiMonthlyRate = refiRate / 100 / 12;
+            const refiMonthlyPayment = refiAmount * (refiMonthlyRate * Math.pow(1 + refiMonthlyRate, 360)) / 
+                                      (Math.pow(1 + refiMonthlyRate, 360) - 1);
+            
+            const monthlyInsurance = (arv * 0.005) / 12;
+            const monthlyTaxes = (arv * 0.012) / 12;
+            const monthlyManagement = monthlyRent * (propertyManagement / 100);
+            const monthlyMaintenance = monthlyRent * 0.05;
+            const monthlyVacancy = monthlyRent * 0.08;
+            
+            const totalMonthlyExpenses = refiMonthlyPayment + monthlyInsurance + monthlyTaxes + 
+                                        monthlyManagement + monthlyMaintenance + monthlyVacancy;
+            const monthlyCashFlow = monthlyRent - totalMonthlyExpenses;
+            const annualCashFlow = monthlyCashFlow * 12;
+            const cashOnCashReturn = (annualCashFlow / (totalInitialInvestment - cashOutAtRefi)) * 100;
+            
+            document.getElementById('flipToRentResults').innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">Refinance Amount (${refiLTV}% LTV)</span>
+                    <span class="result-value">$${refiAmount.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Cash Out at Refi</span>
+                    <span class="result-value positive">$${cashOutAtRefi.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Money Left in Deal</span>
+                    <span class="result-value">$${(totalInitialInvestment - cashOutAtRefi).toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Monthly Rent</span>
+                    <span class="result-value positive">+$${monthlyRent.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Monthly P&I Payment</span>
+                    <span class="result-value negative">-$${refiMonthlyPayment.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Monthly Expenses</span>
+                    <span class="result-value negative">-$${(totalMonthlyExpenses - refiMonthlyPayment).toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label"><strong>Monthly Cash Flow</strong></span>
+                    <span class="result-value ${monthlyCashFlow > 0 ? 'positive' : 'negative'}"><strong>$${monthlyCashFlow.toFixed(0).toLocaleString()}</strong></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Annual Cash Flow</span>
+                    <span class="result-value ${annualCashFlow > 0 ? 'positive' : 'negative'}">$${annualCashFlow.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Cash-on-Cash Return</span>
+                    <span class="result-value ${cashOnCashReturn > 0 ? 'positive' : 'negative'}">${cashOnCashReturn.toFixed(1)}%</span>
+                </div>
+            `;
+            
+            // Complete Fee Breakdown
+            document.getElementById('feeBreakdown').innerHTML = `
+                <div class="calculator-grid">
+                    <div class="card">
+                        <h3>Acquisition Fees</h3>
+                        <div class="result-item">
+                            <span class="result-label">Loan Origination (2%)</span>
+                            <span class="result-value">$${loanOriginationFee.toFixed(0).toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Appraisal</span>
+                            <span class="result-value">$${appraisalFee}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Inspection</span>
+                            <span class="result-value">$${inspectionFee}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Title Insurance</span>
+                            <span class="result-value">$${titleInsurance.toFixed(0).toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Recording Fees</span>
+                            <span class="result-value">$${recordingFees}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Holding Costs</h3>
+                        <div class="result-item">
+                            <span class="result-label">Total Interest</span>
+                            <span class="result-value">$${totalInterestPaid.toFixed(0).toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Insurance</span>
+                            <span class="result-value">$${insurance.toFixed(0).toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Property Tax</span>
+                            <span class="result-value">$${propertyTax.toFixed(0).toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Utilities</span>
+                            <span class="result-value">$${utilities.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Renovation Costs</h3>
+                        <div class="result-item">
+                            <span class="result-label">Base Budget</span>
+                            <span class="result-value">$${renobudget.toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Contingency (10%)</span>
+                            <span class="result-value">$${contingency.toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Permits</span>
+                            <span class="result-value">$${permits.toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label"><strong>Total Reno Cost</strong></span>
+                            <span class="result-value"><strong>$${(renobudget + contingency + permits).toLocaleString()}</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Exit Costs (Sell)</h3>
+                        <div class="result-item">
+                            <span class="result-label">Realtor Commission (${realtorCommission}%)</span>
+                            <span class="result-value">$${(salePrice * realtorCommission / 100).toFixed(0).toLocaleString()}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Staging</span>
+                            <span class="result-value">$3,000</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Closing Costs</span>
+                            <span class="result-value">$2,000</span>
+                        </div>
+                    </div>
+                </div>
+                
+                ${netProfit < 20000 ? '<div class="warning"><strong>⚠️ Warning:</strong> Net profit is below $20,000. Consider renegotiating purchase price or reducing renovation costs.</div>' : ''}
+                ${roi < 20 ? '<div class="warning"><strong>⚠️ Warning:</strong> ROI is below 20%. This deal may not meet typical investor thresholds.</div>' : ''}
+                ${monthlyCashFlow < 200 ? '<div class="warning"><strong>⚠️ Warning:</strong> Monthly cash flow for rental is below $200. Consider increasing rent or reducing expenses.</div>' : ''}
+                ${(purchasePrice + renobudget) / arv > 0.75 ? '<div class="warning"><strong>⚠️ Warning:</strong> You\'re over 75% ARV. Most hard money lenders prefer 70% or less.</div>' : ''}
+                ${roi > 30 ? '<div class="success"><strong>✅ Great Deal!</strong> ROI exceeds 30%. This appears to be a strong investment opportunity.</div>' : ''}
+            `;
+        }
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate corresponding button
+            event.target.classList.add('active');
+        }
+        
+        // Initialize calculations on page load
+        window.onload = function() {
+            calculateAll();
+        };
+    </script>
+</body>
+</html>
