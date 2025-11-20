@@ -280,6 +280,12 @@
         
         <!-- Calculator Tab -->
         <div id="calculator" class="tab-content active">
+            <!-- Deal Summary Card -->
+            <div class="card full-width" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%); margin-bottom: 20px;">
+                <h2>📈 Deal Summary</h2>
+                <div id="dealSummary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;"></div>
+            </div>
+            
             <div class="calculator-grid">
                 <!-- Input Section -->
                 <div class="card">
@@ -690,6 +696,38 @@
                                      (fullLoanPayment * holdingMonths);
             const totalHoldingCosts = totalInterestPaid + insurance + propertyTax + utilities;
             
+            // Update Deal Summary
+            const allInCost = purchasePrice + renobudget + contingency + permits + closingCosts + totalHoldingCosts;
+            const ltv = (loanAmount / arv) * 100;
+            const allInPercent = (allInCost / arv) * 100;
+            
+            document.getElementById('dealSummary').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="result-label">All-In Cost</div>
+                    <div class="result-value highlight" style="font-size: 1.3rem;">$${allInCost.toFixed(0).toLocaleString()}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="result-label">ARV</div>
+                    <div class="result-value highlight" style="font-size: 1.3rem;">$${arv.toLocaleString()}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="result-label">All-In % of ARV</div>
+                    <div class="result-value ${allInPercent < 75 ? 'positive' : 'negative'}" style="font-size: 1.3rem;">${allInPercent.toFixed(1)}%</div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="result-label">Cash Required</div>
+                    <div class="result-value" style="font-size: 1.3rem;">$${totalInitialInvestment.toFixed(0).toLocaleString()}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="result-label">Loan Amount</div>
+                    <div class="result-value" style="font-size: 1.3rem;">$${loanAmount.toFixed(0).toLocaleString()}</div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="result-label">LTV</div>
+                    <div class="result-value ${ltv < 70 ? 'positive' : ltv < 75 ? '' : 'negative'}" style="font-size: 1.3rem;">${ltv.toFixed(1)}%</div>
+                </div>
+            `;
+            
             // Update Initial Costs Display
             document.getElementById('initialCosts').innerHTML = `
                 <div class="result-item">
@@ -737,36 +775,63 @@
             // Flip to Sell Analysis
             const salePrice = parseFloat(document.getElementById('salePrice').value) || arv;
             const realtorCommission = parseFloat(document.getElementById('realtorCommission').value) || 6;
-            const sellingCosts = (salePrice * realtorCommission / 100) + 3000 + 2000; // Commission + staging + misc
-            const totalProjectExpenses = totalProjectCost + totalHoldingCosts + closingCosts + permits;
-            const netProfit = salePrice - loanAmount - totalProjectExpenses - sellingCosts;
-            const roi = (netProfit / totalInitialInvestment) * 100;
+            const realtorFees = salePrice * (realtorCommission / 100);
+            const stagingCosts = 3000;
+            const sellerClosingCosts = 2000;
+            const totalSellingCosts = realtorFees + stagingCosts + sellerClosingCosts;
+            
+            // Total costs breakdown:
+            // Initial cash invested (down payment, closing costs, contingency, permits)
+            const initialCashInvested = downPayment + closingCosts + contingency + permits;
+            
+            // Calculate gross profit
+            const grossProfit = salePrice - loanAmount - totalSellingCosts - totalHoldingCosts - initialCashInvested;
+            
+            // ROI is based on actual cash invested (not including reserves as they're returned)
+            const actualCashInvested = initialCashInvested + totalHoldingCosts;
+            const roi = (grossProfit / actualCashInvested) * 100;
             const totalMonths = constructionMonths + holdingMonths;
             const annualizedROI = (roi / totalMonths) * 12;
             
             document.getElementById('flipToSellResults').innerHTML = `
                 <div class="result-item">
                     <span class="result-label">Sale Price</span>
-                    <span class="result-value">$${salePrice.toLocaleString()}</span>
+                    <span class="result-value positive">$${salePrice.toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Loan Payoff</span>
-                    <span class="result-value negative">-$${loanAmount.toFixed(0).toLocaleString()}</span>
+                    <span class="result-label">Purchase Price</span>
+                    <span class="result-value negative">-$${purchasePrice.toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Selling Costs</span>
-                    <span class="result-value negative">-$${sellingCosts.toFixed(0).toLocaleString()}</span>
+                    <span class="result-label">Renovation Costs</span>
+                    <span class="result-value negative">-$${(renobudget + contingency + permits).toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total Project Cost</span>
-                    <span class="result-value negative">-$${totalProjectExpenses.toFixed(0).toLocaleString()}</span>
+                    <span class="result-label">Closing Costs (Buy)</span>
+                    <span class="result-value negative">-$${closingCosts.toFixed(0).toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label"><strong>Net Profit</strong></span>
-                    <span class="result-value ${netProfit > 0 ? 'positive' : 'negative'}"><strong>$${netProfit.toFixed(0).toLocaleString()}</strong></span>
+                    <span class="result-label">Holding Costs</span>
+                    <span class="result-value negative">-$${totalHoldingCosts.toFixed(0).toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">ROI</span>
+                    <span class="result-label">Realtor Commission (${realtorCommission}%)</span>
+                    <span class="result-value negative">-$${realtorFees.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Staging & Closing (Sell)</span>
+                    <span class="result-value negative">-$${(stagingCosts + sellerClosingCosts).toLocaleString()}</span>
+                </div>
+                <div class="result-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 10px;">
+                    <span class="result-label"><strong>Gross Profit</strong></span>
+                    <span class="result-value ${grossProfit > 0 ? 'positive' : 'negative'}"><strong>$${grossProfit.toFixed(0).toLocaleString()}</strong></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Cash Invested</span>
+                    <span class="result-value">$${actualCashInvested.toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">ROI on Cash</span>
                     <span class="result-value ${roi > 0 ? 'positive' : 'negative'}">${roi.toFixed(1)}%</span>
                 </div>
                 <div class="result-item">
@@ -922,7 +987,7 @@
                     </div>
                 </div>
                 
-                ${netProfit < 20000 ? '<div class="warning"><strong>⚠️ Warning:</strong> Net profit is below $20,000. Consider renegotiating purchase price or reducing renovation costs.</div>' : ''}
+                ${grossProfit < 20000 ? '<div class="warning"><strong>⚠️ Warning:</strong> Gross profit is below $20,000. Consider renegotiating purchase price or reducing renovation costs.</div>' : ''}
                 ${roi < 20 ? '<div class="warning"><strong>⚠️ Warning:</strong> ROI is below 20%. This deal may not meet typical investor thresholds.</div>' : ''}
                 ${monthlyCashFlow < 200 ? '<div class="warning"><strong>⚠️ Warning:</strong> Monthly cash flow for rental is below $200. Consider increasing rent or reducing expenses.</div>' : ''}
                 ${(purchasePrice + renobudget) / arv > 0.75 ? '<div class="warning"><strong>⚠️ Warning:</strong> You\'re over 75% ARV. Most hard money lenders prefer 70% or less.</div>' : ''}
