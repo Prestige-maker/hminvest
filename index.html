@@ -312,7 +312,7 @@
                     </div>
                     
                     <div class="input-group">
-                        <label for="downPaymentPercent">Down Payment (%)</label>
+                        <label for="downPaymentPercent">Down Payment (% of purchase)</label>
                         <input type="number" id="downPaymentPercent" value="30" oninput="calculateAll()">
                     </div>
                     
@@ -661,23 +661,26 @@
             const constructionMonths = parseFloat(document.getElementById('constructionMonths').value) || 6;
             const holdingMonths = parseFloat(document.getElementById('holdingMonths').value) || 2;
             
-            // Calculate loan amounts
-            const totalProjectCost = purchasePrice + renobudget;
-            const downPayment = totalProjectCost * (downPaymentPercent / 100);
-            const loanAmount = totalProjectCost - downPayment;
+            // Calculate loan amounts - CORRECTED STRUCTURE
+            // Down payment is 30% of PURCHASE PRICE only
+            const downPayment = purchasePrice * (downPaymentPercent / 100);
             
-            // During construction: interest only on purchase price portion (80% of purchase)
-            const purchaseLoanAmount = purchasePrice * 0.8; // They loan 80% of purchase
+            // Loan covers 70% of purchase + 100% of renovation
+            const purchaseLoanAmount = purchasePrice * (1 - downPaymentPercent / 100); // 70% of purchase
+            const renoLoanAmount = renobudget; // 100% of reno
+            const loanAmount = purchaseLoanAmount + renoLoanAmount;
+            
+            // During construction: interest only on purchase loan portion
             const monthlyRate = interestRate / 100 / 12;
             const constructionPayment = purchaseLoanAmount * monthlyRate;
             
-            // After construction: interest on full loan
+            // After construction: interest on full loan (purchase + reno)
             const fullLoanPayment = loanAmount * monthlyRate;
             
             // Calculate all fees and costs
             const closingCosts = loanAmount * 0.065; // 6.5% of loan amount
-            const contingency = renobudget * 0.10; // 10% contingency
-            const reserves = loanAmount * 0.25; // 25% reserves required
+            const contingency = renobudget * 0.10; // 10% contingency on reno
+            const reserves = renobudget * 0.25; // 25% reserves on RENO costs
             const permits = 2500; // Average permit costs
             const insurance = purchasePrice * 0.005 * (constructionMonths + holdingMonths); // 0.5% annually
             const propertyTax = purchasePrice * 0.012 * ((constructionMonths + holdingMonths) / 12); // 1.2% annually
@@ -731,44 +734,58 @@
             // Update Initial Costs Display
             document.getElementById('initialCosts').innerHTML = `
                 <div class="result-item">
-                    <span class="result-label">Down Payment (${downPaymentPercent}%)</span>
+                    <span class="result-label">Down Payment (${downPaymentPercent}% of purchase)</span>
                     <span class="result-value">$${downPayment.toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Closing Costs (~6.5%)</span>
+                    <span class="result-label">Closing Costs (~6.5% of loan)</span>
                     <span class="result-value">$${closingCosts.toFixed(0).toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Contingency (10%)</span>
+                    <span class="result-label">Reno Contingency (10% of reno)</span>
                     <span class="result-value">$${contingency.toLocaleString()}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Required Reserves (25%)</span>
+                    <span class="result-label">Required Reserves (25% of reno)</span>
                     <span class="result-value">$${reserves.toFixed(0).toLocaleString()}</span>
                 </div>
                 <div class="result-item">
                     <span class="result-label">Permits & Fees</span>
                     <span class="result-value">$${permits.toLocaleString()}</span>
                 </div>
-                <div class="result-item">
+                <div class="result-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 10px;">
                     <span class="result-label"><strong>Total Cash Needed</strong></span>
                     <span class="result-value highlight"><strong>$${totalInitialInvestment.toFixed(0).toLocaleString()}</strong></span>
+                </div>
+                <div class="info" style="margin-top: 15px;">
+                    <strong>Loan Structure:</strong><br>
+                    • Purchase Loan: $${purchaseLoanAmount.toLocaleString()} (70% of purchase)<br>
+                    • Reno Loan: $${renoLoanAmount.toLocaleString()} (100% of reno)<br>
+                    • Total Loan: $${loanAmount.toLocaleString()}
                 </div>
             `;
             
             // Update Monthly Payments
             document.getElementById('monthlyPayments').innerHTML = `
                 <div class="result-item">
-                    <span class="result-label">During Construction</span>
+                    <span class="result-label">During Construction (Purchase only)</span>
                     <span class="result-value">$${constructionPayment.toFixed(0).toLocaleString()}/mo</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">After Construction</span>
+                    <span class="result-label">After Construction (Full loan)</span>
                     <span class="result-value">$${fullLoanPayment.toFixed(0).toLocaleString()}/mo</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total Interest Paid</span>
-                    <span class="result-value negative">$${totalInterestPaid.toFixed(0).toLocaleString()}</span>
+                    <span class="result-label">Construction Interest (${constructionMonths} mo)</span>
+                    <span class="result-value negative">$${(constructionPayment * constructionMonths).toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Holding Interest (${holdingMonths} mo)</span>
+                    <span class="result-value negative">$${(fullLoanPayment * holdingMonths).toFixed(0).toLocaleString()}</span>
+                </div>
+                <div class="result-item" style="border-top: 1px solid #e2e8f0; margin-top: 10px; padding-top: 10px;">
+                    <span class="result-label"><strong>Total Interest Paid</strong></span>
+                    <span class="result-value negative"><strong>$${totalInterestPaid.toFixed(0).toLocaleString()}</strong></span>
                 </div>
             `;
             
