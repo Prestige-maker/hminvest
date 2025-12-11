@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Hard Money Flip Calculator - NJ Edition</title>
+    <title>House Flip Profit Calculator</title>
     <style>
         * {
             margin: 0;
@@ -12,853 +12,567 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+        .calculator {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         h1 {
-            color: white;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
         }
         
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+        .subtitle {
+            color: #666;
             margin-bottom: 30px;
+            font-size: 14px;
         }
         
-        .card {
-            background: white;
-            border-radius: 15px;
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .card h2 {
-            color: #4a5568;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
         }
         
-        .card h3 {
-            color: #2d3748;
-            margin: 15px 0 10px 0;
-            font-size: 1.1rem;
+        .section-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
-        .input-group label {
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        label {
             display: block;
-            color: #2d3748;
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
         }
         
-        .input-group input, .input-group select {
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .dollar-sign {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-weight: 600;
+        }
+        
+        input[type="number"] {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #e2e8f0;
+            padding: 12px 15px 12px 35px;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 16px;
             transition: border-color 0.3s;
         }
         
-        .input-group input:focus, .input-group select:focus {
+        input[type="number"]:focus {
             outline: none;
             border-color: #667eea;
         }
         
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .lender-section {
-            background: #f7fafc;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .lender-header {
+        .profit-split {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .remove-lender {
-            background: #f56565;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-label {
-            color: #4a5568;
-            font-weight: 500;
-        }
-        
-        .result-value {
-            color: #2d3748;
-            font-weight: 700;
-        }
-        
-        .result-value.positive {
-            color: #48bb78;
-        }
-        
-        .result-value.negative {
-            color: #f56565;
-        }
-        
-        .result-value.highlight {
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-        
-        .scenario-box {
-            background: #f7fafc;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 4px solid #667eea;
-        }
-        
-        .scenario-box h4 {
-            color: #2d3748;
-            margin-bottom: 10px;
-        }
-        
-        .checklist {
-            background: #f7fafc;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        
-        .checklist h3 {
-            color: #2d3748;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-        
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: white;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        
-        .checklist-item:hover {
-            background-color: #edf2f7;
-        }
-        
-        .checklist-item input[type="checkbox"] {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        
-        .checklist-item label {
-            cursor: pointer;
-            color: #4a5568;
-            flex: 1;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
-            background: white;
-            border-radius: 10px;
-            padding: 5px;
         }
         
-        .tab-button {
+        .split-option {
             flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            color: #718096;
-            font-weight: 600;
-            cursor: pointer;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
             transition: all 0.3s;
         }
         
-        .tab-button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .split-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .split-option.active {
+            border-color: #667eea;
+            background: #667eea;
             color: white;
         }
         
-        .tab-content {
-            display: none;
+        .split-label {
+            font-size: 12px;
+            margin-bottom: 5px;
+            opacity: 0.8;
         }
         
-        .tab-content.active {
-            display: block;
+        .split-value {
+            font-size: 20px;
+            font-weight: 700;
         }
         
-        .warning {
-            background: #fff5f5;
-            border-left: 4px solid #fc8181;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        
-        .success {
-            background: #f0fff4;
-            border-left: 4px solid #48bb78;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        
-        .info {
-            background: #ebf8ff;
-            border-left: 4px solid #4299e1;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        
-        .timeline {
-            margin-top: 20px;
-        }
-        
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .timeline-number {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-        
-        .timeline-content {
-            flex: 1;
-        }
-        
-        .button {
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 10px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s;
-            margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
         }
         
-        .button:hover {
+        .calculate-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
-        .button.secondary {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        .calculate-btn:active {
+            transform: translateY(0);
         }
         
-        .full-width {
-            grid-column: 1 / -1;
+        .results {
+            margin-top: 30px;
+            display: none;
         }
         
-        .toggle-switch {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
         }
         
-        .toggle-switch input[type="checkbox"] {
-            width: 50px;
-            height: 26px;
-            appearance: none;
-            background: #cbd5e0;
-            border-radius: 13px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-right: 10px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
-        .toggle-switch input[type="checkbox"]:checked {
-            background: #667eea;
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
         }
         
-        .toggle-switch input[type="checkbox"]:before {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
+        .result-header {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .result-value.positive {
+            color: #10b981;
+        }
+        
+        .result-value.negative {
+            color: #ef4444;
+        }
+        
+        .breakdown {
             background: white;
-            transition: transform 0.3s;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
         }
         
-        .toggle-switch input[type="checkbox"]:checked:before {
-            transform: translateX(24px);
+        .breakdown-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .breakdown-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: #667eea;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #667eea;
+        }
+        
+        .breakdown-label {
+            color: #555;
+        }
+        
+        .breakdown-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .partner-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .partner-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .partner-card.partner-a {
+            border-color: #667eea;
+        }
+        
+        .partner-card.partner-b {
+            border-color: #764ba2;
+        }
+        
+        .partner-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .partner-card.partner-a .partner-name {
+            color: #667eea;
+        }
+        
+        .partner-card.partner-b .partner-name {
+            color: #764ba2;
+        }
+        
+        .partner-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .partner-detail-label {
+            color: #666;
+        }
+        
+        .partner-detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .partner-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .partner-total-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .partner-total-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .partner-card.partner-a .partner-total-value {
+            color: #667eea;
+        }
+        
+        .partner-card.partner-b .partner-total-value {
+            color: #764ba2;
+        }
+        
+        .roi-value {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .roi-value.positive {
+            color: #10b981;
         }
         
         @media (max-width: 768px) {
+            .calculator {
+                padding: 25px;
+            }
+            
+            .partner-section {
+                grid-template-columns: 1fr;
+            }
+            
             h1 {
-                font-size: 1.8rem;
-            }
-            
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .input-row {
-                grid-template-columns: 1fr;
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏠 Professional Hard Money Flip Calculator - NJ Edition</h1>
+    <div class="calculator">
+        <h1>🏠 House Flip Profit Calculator</h1>
+        <p class="subtitle">Calculate returns for Partner A (Acquisition) & Partner B (Renovation)</p>
         
-        <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('calculator')">Calculator</button>
-            <button class="tab-button" onclick="switchTab('checklist')">Checklist</button>
-            <button class="tab-button" onclick="switchTab('timeline')">Timeline</button>
-        </div>
-        
-        <!-- Calculator Tab -->
-        <div id="calculator" class="tab-content active">
-            <!-- Deal Summary Card -->
-            <div class="card full-width" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%); margin-bottom: 20px;">
-                <h2>📈 Deal Summary</h2>
-                <div id="dealSummary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;"></div>
+        <!-- Partner A Inputs -->
+        <div class="input-section">
+            <div class="section-title">💰 Partner A - Acquisition Costs</div>
+            
+            <div class="input-group">
+                <label for="purchasePrice">Purchase Price</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="purchasePrice" value="200000" min="0" step="1000">
+                </div>
             </div>
             
-            <div class="calculator-grid">
-                <!-- Input Section -->
-                <div class="card">
-                    <h2>📊 Deal Parameters</h2>
-                    
-                    <div class="input-group">
-                        <label for="purchasePrice">Purchase Price ($)</label>
-                        <input type="number" id="purchasePrice" value="150000" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="renobudget">Base Renovation Budget ($)</label>
-                        <input type="number" id="renobudget" value="50000" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="arv">After Repair Value - ARV ($)</label>
-                        <input type="number" id="arv" value="280000" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="constructionMonths">Construction Period (Months)</label>
-                        <input type="number" id="constructionMonths" value="6" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="holdingMonths">Additional Holding (Months)</label>
-                        <input type="number" id="holdingMonths" value="2" oninput="calculateAll()">
-                    </div>
-                    
-                    <h3>Contingencies & Reserves</h3>
-                    
-                    <div class="input-group">
-                        <label for="purchaseContingency">Purchase Contingency (%)</label>
-                        <input type="number" id="purchaseContingency" value="10" step="1" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="renoContingency">Renovation Contingency (%)</label>
-                        <input type="number" id="renoContingency" value="25" step="1" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="toggle-switch">
-                        <input type="checkbox" id="useContingencies" checked onchange="calculateAll()">
-                        <label for="useContingencies">Include contingencies in profit calculations</label>
-                    </div>
-                    
-                    <h3>Property Taxes & Insurance</h3>
-                    
-                    <div class="toggle-switch">
-                        <input type="checkbox" id="manualPropertyTax" onchange="togglePropertyTax()">
-                        <label for="manualPropertyTax">Set property tax manually</label>
-                    </div>
-                    
-                    <div id="autoTaxSection">
-                        <div class="input-group">
-                            <label for="propertyTaxRate">Annual Property Tax Rate (%)</label>
-                            <input type="number" id="propertyTaxRate" value="2.49" step="0.01" oninput="calculateAll()">
-                        </div>
-                    </div>
-                    
-                    <div id="manualTaxSection" style="display: none;">
-                        <div class="input-group">
-                            <label for="annualPropertyTax">Annual Property Tax ($)</label>
-                            <input type="number" id="annualPropertyTax" value="3735" oninput="calculateAll()">
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="monthlyInsurance">Monthly Insurance ($)</label>
-                        <input type="number" id="monthlyInsurance" value="200" oninput="calculateAll()">
-                    </div>
+            <div class="input-group">
+                <label for="closingCostsBuyer">Buyer's Closing Costs (auto: 2.5% of purchase)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="closingCostsBuyer" value="5000" min="0" step="100" readonly style="background: #f0f0f0;">
                 </div>
-                
-                <!-- Financing Options -->
-                <div class="card">
-                    <h2>💰 Financing Structure</h2>
-                    
-                    <div class="input-group">
-                        <label for="lenderType">Lender Type</label>
-                        <select id="lenderType" onchange="changeLenderType()">
-                            <option value="hardmoney">Hard Money Lender</option>
-                            <option value="private">Single Private Lender</option>
-                            <option value="multiple">Multiple Private Lenders</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Hard Money Section -->
-                    <div id="hardMoneySection">
-                        <div class="input-group">
-                            <label for="interestRate">Interest Rate (%)</label>
-                            <input type="number" id="interestRate" value="10.49" step="0.01" oninput="calculateAll()">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="downPaymentPercent">Down Payment (% of purchase)</label>
-                            <input type="number" id="downPaymentPercent" value="30" oninput="calculateAll()">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="pointsCharged">Points Charged (%)</label>
-                            <input type="number" id="pointsCharged" value="2" step="0.5" oninput="calculateAll()">
-                        </div>
-                    </div>
-                    
-                    <!-- Single Private Lender Section -->
-                    <div id="privateLenderSection" style="display: none;">
-                        <div class="input-group">
-                            <label for="privateAmount">Loan Amount ($)</label>
-                            <input type="number" id="privateAmount" value="200000" oninput="calculateAll()">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="privateRate">Interest Rate (%)</label>
-                            <input type="number" id="privateRate" value="12" step="0.25" oninput="calculateAll()">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="privatePoints">Points/Fees (%)</label>
-                            <input type="number" id="privatePoints" value="3" step="0.5" oninput="calculateAll()">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="privateDownPayment">Down Payment Required ($)</label>
-                            <input type="number" id="privateDownPayment" value="0" oninput="calculateAll()">
-                        </div>
-                    </div>
-                    
-                    <!-- Multiple Private Lenders Section -->
-                    <div id="multipleLendersSection" style="display: none;">
-                        <button class="button secondary" onclick="addLender()">+ Add Lender</button>
-                        <div id="lendersList"></div>
-                        <div class="result-item" style="margin-top: 15px; border-top: 2px solid #667eea; padding-top: 15px;">
-                            <span class="result-label"><strong>Total Financing</strong></span>
-                            <span class="result-value highlight" id="totalMultipleFinancing">$0</span>
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="loanCosts">Loan/Financing Costs (if applicable)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="loanCosts" value="0" min="0" step="100">
                 </div>
-                
-                <!-- Initial Costs -->
-                <div class="card">
-                    <h2>💵 Initial Investment Required</h2>
-                    <div id="initialCosts"></div>
-                </div>
-                
-                <!-- Monthly Payments -->
-                <div class="card">
-                    <h2>📅 Monthly Payments</h2>
-                    <div id="monthlyPayments"></div>
-                </div>
-                
-                <!-- Flip to Sell Analysis -->
-                <div class="card">
-                    <h2>🏷️ Flip to Sell Analysis</h2>
-                    
-                    <div class="input-group">
-                        <label for="salePrice">Sale Price ($)</label>
-                        <input type="number" id="salePrice" value="280000" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="realtorCommission">Realtor Commission (%)</label>
-                        <input type="number" id="realtorCommission" value="5" step="0.1" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="toggle-switch">
-                        <input type="checkbox" id="includeStaging" checked onchange="calculateAll()">
-                        <label for="includeStaging">Include staging costs ($3,000)</label>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="njTransferTax">NJ Transfer Tax (% of sale)</label>
-                        <input type="number" id="njTransferTax" value="1" step="0.1" oninput="calculateAll()">
-                    </div>
-                    
-                    <div id="flipToSellResults"></div>
-                </div>
-                
-                <!-- Profit Scenarios -->
-                <div class="card">
-                    <h2>📊 Profit Scenarios</h2>
-                    <div id="profitScenarios"></div>
-                </div>
-                
-                <!-- Flip to Rent Analysis -->
-                <div class="card">
-                    <h2>🏘️ Flip to Refinance & Rent</h2>
-                    
-                    <div class="input-group">
-                        <label for="monthlyRent">Monthly Rent ($)</label>
-                        <input type="number" id="monthlyRent" value="2200" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="refiLTV">Refinance LTV (%)</label>
-                        <input type="number" id="refiLTV" value="75" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="refiRate">Refinance Rate (%)</label>
-                        <input type="number" id="refiRate" value="7.5" step="0.01" oninput="calculateAll()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="propertyManagement">Property Management (%)</label>
-                        <input type="number" id="propertyManagement" value="10" oninput="calculateAll()">
-                    </div>
-                    
-                    <div id="flipToRentResults"></div>
-                </div>
-                
-                <!-- All Fees Breakdown -->
-                <div class="card full-width">
-                    <h2>📋 Complete Fee Breakdown</h2>
-                    <div id="feeBreakdown"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="holdingCosts">Holding Costs (mortgage, taxes, insurance, utilities)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="holdingCosts" value="8000" min="0" step="100">
                 </div>
             </div>
         </div>
         
-        <!-- Checklist Tab -->
-        <div id="checklist" class="tab-content">
-            <div class="calculator-grid">
-                <div class="card">
-                    <h2>✅ Pre-Purchase Checklist</h2>
-                    <div class="checklist">
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check1">
-                            <label for="check1">Property inspection completed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check2">
-                            <label for="check2">Title search completed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check3">
-                            <label for="check3">Comparable sales analysis (3-5 comps)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check4">
-                            <label for="check4">Contractor bids obtained (minimum 3)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check5">
-                            <label for="check5">Insurance quotes obtained</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check6">
-                            <label for="check6">Lender approved & terms finalized</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check7">
-                            <label for="check7">Proof of funds for down payment + reserves</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check8">
-                            <label for="check8">Environmental/hazard assessments</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check9">
-                            <label for="check9">Zoning verification</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check10">
-                            <label for="check10">ARV appraisal or BPO completed</label>
-                        </div>
-                    </div>
+        <!-- Partner B Inputs -->
+        <div class="input-section">
+            <div class="section-title">🔨 Partner B - Renovation Costs</div>
+            
+            <div class="input-group">
+                <label for="renovationCosts">Construction & Materials Costs</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="renovationCosts" value="60000" min="0" step="1000">
                 </div>
-                
-                <div class="card">
-                    <h2>🔨 Renovation Checklist</h2>
-                    <div class="checklist">
-                        <h3>NJ Permits Required</h3>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="permit1">
-                            <label for="permit1">Building permit ($500-$2500)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="permit2">
-                            <label for="permit2">Electrical permit ($200-$800)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="permit3">
-                            <label for="permit3">Plumbing permit ($200-$800)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="permit4">
-                            <label for="permit4">HVAC permit ($200-$600)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="permit5">
-                            <label for="permit5">Fire safety permit ($150-$400)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="permit6">
-                            <label for="permit6">Certificate of Occupancy ($200-$500)</label>
-                        </div>
-                        
-                        <h3 style="margin-top: 20px;">Renovation Tasks</h3>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="reno1">
-                            <label for="reno1">General contractor hired & contract signed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="reno2">
-                            <label for="reno2">Detailed scope of work document</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="reno3">
-                            <label for="reno3">Materials list & ordering schedule</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="reno4">
-                            <label for="reno4">Project timeline with milestones</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="reno5">
-                            <label for="reno5">Weekly progress meetings scheduled</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="reno6">
-                            <label for="reno6">Change order process established</label>
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="permitFees">Permit Fees</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="permitFees" value="2000" min="0" step="100">
                 </div>
-                
-                <div class="card">
-                    <h2>📑 NJ Specific Requirements</h2>
-                    <div class="checklist">
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj1">
-                            <label for="nj1">Smoke/CO detector certificate</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj2">
-                            <label for="nj2">Lead paint disclosure (pre-1978 homes)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj3">
-                            <label for="nj3">Private well testing (if applicable)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj4">
-                            <label for="nj4">Septic inspection (if applicable)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj5">
-                            <label for="nj5">NJ Realty Transfer Fee Form</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj6">
-                            <label for="nj6">Bulk sales certificate (for tax clearance)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="nj7">
-                            <label for="nj7">Final water reading</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2>🏪 Exit Strategy Checklist</h2>
-                    <div class="checklist">
-                        <h3>For Flip to Sell</h3>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="sell1">
-                            <label for="sell1">Professional photos scheduled</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="sell2">
-                            <label for="sell2">Staging company hired (if using)</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="sell3">
-                            <label for="sell3">Realtor selected & listing agreement signed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="sell4">
-                            <label for="sell4">Pre-listing inspection completed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="sell5">
-                            <label for="sell5">Marketing materials prepared</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="sell6">
-                            <label for="sell6">Attorney review period understood</label>
-                        </div>
-                        
-                        <h3 style="margin-top: 20px;">For Refinance & Rent</h3>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="rent1">
-                            <label for="rent1">Refinance lender selected</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="rent2">
-                            <label for="rent2">Appraisal ordered for refinance</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="rent3">
-                            <label for="rent3">Property management company interviewed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="rent4">
-                            <label for="rent4">Rental market analysis completed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="rent5">
-                            <label for="rent5">NJ landlord registration completed</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="rent6">
-                            <label for="rent6">Lead paint certification obtained</label>
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="assistantCosts">Assistant Salary (if applicable)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="assistantCosts" value="8000" min="0" step="100">
                 </div>
             </div>
         </div>
         
-        <!-- Timeline Tab -->
-        <div id="timeline" class="tab-content">
-            <div class="card full-width">
-                <h2>📅 NJ Flip Project Timeline</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-number">1</div>
-                        <div class="timeline-content">
-                            <strong>Week 1-2: Due Diligence</strong>
-                            <p>Property inspection, title search, contractor bids, secure financing, attorney review</p>
-                        </div>
+        <!-- Shared/Professional Costs -->
+        <div class="input-section">
+            <div class="section-title">⚖️ Professional & Legal Fees</div>
+            
+            <div class="input-group">
+                <label for="attorneyFees">Attorney Fees (contracts, LLC formation, etc.)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="attorneyFees" value="2000" min="0" step="100">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="inspectionFees">Inspection & Appraisal Fees</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="inspectionFees" value="1000" min="0" step="100">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sale Info -->
+        <div class="input-section">
+            <div class="section-title">📈 Sale Information</div>
+            
+            <div class="input-group">
+                <label for="salePrice">Sale Price</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="salePrice" value="350000" min="0" step="1000">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="realtorCommission">Realtor Commission (auto: 6% of sale price)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="realtorCommission" value="21000" min="0" step="100" readonly style="background: #f0f0f0;">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="sellerClosingCosts">Seller's Closing Costs (auto: 1% of sale price)</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="sellerClosingCosts" value="3500" min="0" step="100" readonly style="background: #f0f0f0;">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="stagingPhotography">Staging & Professional Photography</label>
+                <div class="input-wrapper">
+                    <span class="dollar-sign">$</span>
+                    <input type="number" id="stagingPhotography" value="2000" min="0" step="100">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profit Split Options -->
+        <div class="input-section">
+            <div class="section-title">🤝 Profit Split</div>
+            <div class="profit-split">
+                <div class="split-option active" data-split="50-50">
+                    <div class="split-label">Equal Partnership</div>
+                    <div class="split-value">50/50</div>
+                </div>
+                <div class="split-option" data-split="40-60">
+                    <div class="split-label">Favors Partner B</div>
+                    <div class="split-value">40/60</div>
+                </div>
+                <div class="split-option" data-split="60-40">
+                    <div class="split-label">Favors Partner A</div>
+                    <div class="split-value">60/40</div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculate()">Calculate Returns 🎯</button>
+        
+        <!-- Results Section -->
+        <div class="results" id="results">
+            <!-- Total Profit -->
+            <div class="result-card">
+                <div class="result-header">Total Net Profit</div>
+                <div class="result-value positive" id="totalProfit">$0</div>
+            </div>
+            
+            <!-- Expense Breakdown -->
+            <div class="breakdown">
+                <div class="breakdown-title">💵 Expense Breakdown</div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Partner A Total Investment</span>
+                    <span class="breakdown-value" id="partnerATotal">$0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Partner B Total Investment</span>
+                    <span class="breakdown-value" id="partnerBTotal">$0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Total Project Cost</span>
+                    <span class="breakdown-value" id="totalCost">$0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Net Proceeds After Sale</span>
+                    <span class="breakdown-value" id="netProceeds">$0</span>
+                </div>
+            </div>
+            
+            <!-- Partner Returns -->
+            <div class="partner-section">
+                <div class="partner-card partner-a">
+                    <div class="partner-name">Partner A Returns</div>
+                    <div class="partner-detail">
+                        <span class="partner-detail-label">Investment Returned</span>
+                        <span class="partner-detail-value" id="partnerAInvestment">$0</span>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">2</div>
-                        <div class="timeline-content">
-                            <strong>Week 3: Closing</strong>
-                            <p>Final walkthrough, closing documents, NJ transfer tax payment, get keys</p>
-                        </div>
+                    <div class="partner-detail">
+                        <span class="partner-detail-label">Profit Share</span>
+                        <span class="partner-detail-value" id="partnerAProfit">$0</span>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">3</div>
-                        <div class="timeline-content">
-                            <strong>Week 4: Permits & Prep</strong>
-                            <p>Pull NJ building permits, order materials, finalize contractor schedule</p>
-                        </div>
+                    <div class="partner-total">
+                        <div class="partner-total-label">Total Payout</div>
+                        <div class="partner-total-value" id="partnerAPayout">$0</div>
+                        <div class="roi-value positive" id="partnerAROI">0% ROI</div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">4</div>
-                        <div class="timeline-content">
-                            <strong>Weeks 5-8: Structural & Systems</strong>
-                            <p>Foundation, framing, roofing, plumbing, electrical, HVAC rough-in, inspections</p>
-                        </div>
+                </div>
+                
+                <div class="partner-card partner-b">
+                    <div class="partner-name">Partner B Returns</div>
+                    <div class="partner-detail">
+                        <span class="partner-detail-label">Investment Returned</span>
+                        <span class="partner-detail-value" id="partnerBInvestment">$0</span>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">5</div>
-                        <div class="timeline-content">
-                            <strong>Weeks 9-12: Interior Work</strong>
-                            <p>Insulation, drywall, flooring, kitchen, bathrooms, municipal inspections</p>
-                        </div>
+                    <div class="partner-detail">
+                        <span class="partner-detail-label">Profit Share</span>
+                        <span class="partner-detail-value" id="partnerBProfit">$0</span>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">6</div>
-                        <div class="timeline-content">
-                            <strong>Weeks 13-16: Finishing Touches</strong>
-                            <p>Paint, fixtures, landscaping, final inspections, CO certificate</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">7</div>
-                        <div class="timeline-content">
-                            <strong>Weeks 17-20: Marketing & Sale</strong>
-                            <p>Photos, staging (optional), MLS listing, showings, negotiate offers</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-number">8</div>
-                        <div class="timeline-content">
-                            <strong>Weeks 21-24: Closing</strong>
-                            <p>Buyer inspections, attorney review, mortgage commitment, final closing</p>
-                        </div>
+                    <div class="partner-total">
+                        <div class="partner-total-label">Total Payout</div>
+                        <div class="partner-total-value" id="partnerBPayout">$0</div>
+                        <div class="roi-value positive" id="partnerBROI">0% ROI</div>
                     </div>
                 </div>
             </div>
@@ -866,647 +580,136 @@
     </div>
     
     <script>
-        let lenderCount = 0;
-        let lenders = [];
+        // Handle profit split selection
+        document.querySelectorAll('.split-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.split-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                calculate(); // Recalculate when split option changes
+            });
+        });
         
-        function togglePropertyTax() {
-            const isManual = document.getElementById('manualPropertyTax').checked;
-            document.getElementById('autoTaxSection').style.display = isManual ? 'none' : 'block';
-            document.getElementById('manualTaxSection').style.display = isManual ? 'block' : 'none';
-            calculateAll();
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
         }
         
-        function changeLenderType() {
-            const lenderType = document.getElementById('lenderType').value;
-            
-            document.getElementById('hardMoneySection').style.display = 
-                lenderType === 'hardmoney' ? 'block' : 'none';
-            document.getElementById('privateLenderSection').style.display = 
-                lenderType === 'private' ? 'block' : 'none';
-            document.getElementById('multipleLendersSection').style.display = 
-                lenderType === 'multiple' ? 'block' : 'none';
-            
-            if (lenderType === 'multiple' && lenders.length === 0) {
-                addLender(); // Add first lender automatically
-            }
-            
-            calculateAll();
-        }
-        
-        function addLender() {
-            if (lenders.length >= 5) {
-                alert('Maximum 5 lenders allowed');
-                return;
-            }
-            
-            lenderCount++;
-            const lenderId = lenderCount;
-            
-            const lenderDiv = document.createElement('div');
-            lenderDiv.className = 'lender-section';
-            lenderDiv.id = `lender-${lenderId}`;
-            
-            lenderDiv.innerHTML = `
-                <div class="lender-header">
-                    <h3>Lender ${lenders.length + 1}</h3>
-                    ${lenders.length > 0 ? `<button class="remove-lender" onclick="removeLender(${lenderId})">Remove</button>` : ''}
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="lenderName-${lenderId}">Lender Name</label>
-                        <input type="text" id="lenderName-${lenderId}" value="Lender ${lenders.length + 1}" oninput="calculateAll()">
-                    </div>
-                    <div class="input-group">
-                        <label for="lenderAmount-${lenderId}">Amount ($)</label>
-                        <input type="number" id="lenderAmount-${lenderId}" value="${lenders.length === 0 ? 100000 : 50000}" oninput="calculateAll()">
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="lenderRate-${lenderId}">Rate (%)</label>
-                        <input type="number" id="lenderRate-${lenderId}" value="${12 + lenders.length}" step="0.25" oninput="calculateAll()">
-                    </div>
-                    <div class="input-group">
-                        <label for="lenderPoints-${lenderId}">Points/Fees (%)</label>
-                        <input type="number" id="lenderPoints-${lenderId}" value="${2 + lenders.length * 0.5}" step="0.5" oninput="calculateAll()">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="lenderPaymentType-${lenderId}">Payment Type</label>
-                    <select id="lenderPaymentType-${lenderId}" oninput="calculateAll()">
-                        <option value="interest-only">Interest Only</option>
-                        <option value="deferred">Deferred (Paid at Exit)</option>
-                        <option value="monthly">Monthly P&I</option>
-                    </select>
-                </div>
-            `;
-            
-            document.getElementById('lendersList').appendChild(lenderDiv);
-            lenders.push(lenderId);
-            calculateAll();
-        }
-        
-        function removeLender(lenderId) {
-            const element = document.getElementById(`lender-${lenderId}`);
-            if (element) {
-                element.remove();
-                lenders = lenders.filter(id => id !== lenderId);
-                
-                // Renumber remaining lenders
-                const lenderDivs = document.querySelectorAll('.lender-section');
-                lenderDivs.forEach((div, index) => {
-                    const header = div.querySelector('h3');
-                    if (header) {
-                        header.textContent = `Lender ${index + 1}`;
-                    }
-                });
-                
-                calculateAll();
-            }
-        }
-        
-        function calculateAll() {
+        function calculate() {
+            // Get input values
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
-            const renobudget = parseFloat(document.getElementById('renobudget').value) || 0;
-            const arv = parseFloat(document.getElementById('arv').value) || 0;
-            const constructionMonths = parseFloat(document.getElementById('constructionMonths').value) || 6;
-            const holdingMonths = parseFloat(document.getElementById('holdingMonths').value) || 2;
-            const lenderType = document.getElementById('lenderType').value;
+            const holdingCosts = parseFloat(document.getElementById('holdingCosts').value) || 0;
+            const loanCosts = parseFloat(document.getElementById('loanCosts').value) || 0;
             
-            // Contingencies
-            const purchaseContingencyPercent = parseFloat(document.getElementById('purchaseContingency').value) || 10;
-            const renoContingencyPercent = parseFloat(document.getElementById('renoContingency').value) || 25;
-            const purchaseContingency = purchasePrice * (purchaseContingencyPercent / 100);
-            const renoContingency = renobudget * (renoContingencyPercent / 100);
-            const useContingencies = document.getElementById('useContingencies').checked;
+            const renovationCosts = parseFloat(document.getElementById('renovationCosts').value) || 0;
+            const permitFees = parseFloat(document.getElementById('permitFees').value) || 0;
+            const assistantCosts = parseFloat(document.getElementById('assistantCosts').value) || 0;
             
-            // Actual renovation cost (base + contingency if used)
-            const actualRenoCost = useContingencies ? renobudget + renoContingency : renobudget;
+            const attorneyFees = parseFloat(document.getElementById('attorneyFees').value) || 0;
+            const inspectionFees = parseFloat(document.getElementById('inspectionFees').value) || 0;
             
-            let downPayment = 0;
-            let loanAmount = 0;
-            let constructionPayment = 0;
-            let fullLoanPayment = 0;
-            let closingCosts = 0;
-            let totalInterestPaid = 0;
-            let lenderFees = 0;
+            const salePrice = parseFloat(document.getElementById('salePrice').value) || 0;
+            const stagingPhotography = parseFloat(document.getElementById('stagingPhotography').value) || 0;
             
-            // Property Tax Calculation
-            let propertyTax = 0;
-            if (document.getElementById('manualPropertyTax').checked) {
-                const annualTax = parseFloat(document.getElementById('annualPropertyTax').value) || 0;
-                propertyTax = annualTax * ((constructionMonths + holdingMonths) / 12);
-            } else {
-                const taxRate = parseFloat(document.getElementById('propertyTaxRate').value) || 2.49;
-                propertyTax = purchasePrice * (taxRate / 100) * ((constructionMonths + holdingMonths) / 12);
+            // Auto-calculate buyer's closing costs (2.5% of purchase price)
+            const closingCostsBuyer = purchasePrice * 0.025;
+            document.getElementById('closingCostsBuyer').value = Math.round(closingCostsBuyer);
+            
+            // Auto-calculate realtor commission (6% of sale price)
+            const realtorCommission = salePrice * 0.06;
+            document.getElementById('realtorCommission').value = Math.round(realtorCommission);
+            
+            // Auto-calculate seller's closing costs (1% of sale price)
+            const sellerClosingCosts = salePrice * 0.01;
+            document.getElementById('sellerClosingCosts').value = Math.round(sellerClosingCosts);
+            
+            // Get profit split
+            const activeSplit = document.querySelector('.split-option.active').dataset.split;
+            let partnerASplit, partnerBSplit;
+            
+            if (activeSplit === '50-50') {
+                partnerASplit = 0.50;
+                partnerBSplit = 0.50;
+            } else if (activeSplit === '40-60') {
+                partnerASplit = 0.40;
+                partnerBSplit = 0.60;
+            } else if (activeSplit === '60-40') {
+                partnerASplit = 0.60;
+                partnerBSplit = 0.40;
             }
             
-            // Insurance calculation
-            const monthlyInsurance = parseFloat(document.getElementById('monthlyInsurance').value) || 200;
-            const totalInsurance = monthlyInsurance * (constructionMonths + holdingMonths);
+            // Calculate Partner A's total investment (acquisition costs)
+            const partnerAInvestment = purchasePrice + closingCostsBuyer + loanCosts + holdingCosts;
             
-            if (lenderType === 'hardmoney') {
-                // Hard Money Calculations
-                const interestRate = parseFloat(document.getElementById('interestRate').value) || 10.49;
-                const downPaymentPercent = parseFloat(document.getElementById('downPaymentPercent').value) || 30;
-                const pointsCharged = parseFloat(document.getElementById('pointsCharged').value) || 2;
-                
-                downPayment = purchasePrice * (downPaymentPercent / 100);
-                const purchaseLoanAmount = purchasePrice * (1 - downPaymentPercent / 100);
-                const renoLoanAmount = renobudget; // Base renovation only for loan
-                loanAmount = purchaseLoanAmount + renoLoanAmount;
-                
-                const monthlyRate = interestRate / 100 / 12;
-                constructionPayment = purchaseLoanAmount * monthlyRate;
-                fullLoanPayment = loanAmount * monthlyRate;
-                
-                lenderFees = loanAmount * (pointsCharged / 100);
-                closingCosts = lenderFees + (loanAmount * 0.045); // Points + other closing costs
-                totalInterestPaid = (constructionPayment * constructionMonths) + (fullLoanPayment * holdingMonths);
-                
-            } else if (lenderType === 'private') {
-                // Single Private Lender
-                loanAmount = parseFloat(document.getElementById('privateAmount').value) || 0;
-                const privateRate = parseFloat(document.getElementById('privateRate').value) || 12;
-                const privatePoints = parseFloat(document.getElementById('privatePoints').value) || 3;
-                downPayment = parseFloat(document.getElementById('privateDownPayment').value) || 0;
-                
-                const monthlyRate = privateRate / 100 / 12;
-                constructionPayment = loanAmount * monthlyRate;
-                fullLoanPayment = loanAmount * monthlyRate;
-                
-                lenderFees = loanAmount * (privatePoints / 100);
-                closingCosts = lenderFees + 5000; // Points + estimated closing
-                totalInterestPaid = fullLoanPayment * (constructionMonths + holdingMonths);
-                
-            } else if (lenderType === 'multiple') {
-                // Multiple Private Lenders
-                let totalLoanAmount = 0;
-                let totalMonthlyPayment = 0;
-                let totalDeferredInterest = 0;
-                
-                lenders.forEach(lenderId => {
-                    const amount = parseFloat(document.getElementById(`lenderAmount-${lenderId}`).value) || 0;
-                    const rate = parseFloat(document.getElementById(`lenderRate-${lenderId}`).value) || 12;
-                    const points = parseFloat(document.getElementById(`lenderPoints-${lenderId}`).value) || 2;
-                    const paymentType = document.getElementById(`lenderPaymentType-${lenderId}`).value;
-                    
-                    totalLoanAmount += amount;
-                    lenderFees += amount * (points / 100);
-                    
-                    const monthlyRate = rate / 100 / 12;
-                    const monthlyInterest = amount * monthlyRate;
-                    
-                    if (paymentType === 'interest-only' || paymentType === 'monthly') {
-                        totalMonthlyPayment += monthlyInterest;
-                    } else if (paymentType === 'deferred') {
-                        totalDeferredInterest += monthlyInterest * (constructionMonths + holdingMonths);
-                    }
-                });
-                
-                loanAmount = totalLoanAmount;
-                constructionPayment = totalMonthlyPayment;
-                fullLoanPayment = totalMonthlyPayment;
-                totalInterestPaid = (totalMonthlyPayment * (constructionMonths + holdingMonths)) + totalDeferredInterest;
-                closingCosts = lenderFees + 5000;
-                
-                // Update total financing display
-                document.getElementById('totalMultipleFinancing').textContent = `$${totalLoanAmount.toLocaleString()}`;
-            }
+            // Calculate Partner B's total investment (renovation costs)
+            const partnerBInvestment = renovationCosts + permitFees + assistantCosts;
             
-            // Common calculations
-            const permits = 3500; // NJ average permits
-            const utilities = 250 * (constructionMonths + holdingMonths); // Higher for NJ
+            // Calculate shared costs
+            const sharedCosts = attorneyFees + inspectionFees;
             
-            const totalInitialInvestment = downPayment + closingCosts + purchaseContingency + renoContingency + permits;
-            const totalHoldingCosts = totalInterestPaid + totalInsurance + propertyTax + utilities;
+            // Calculate total selling costs
+            const totalSellingCosts = realtorCommission + sellerClosingCosts + stagingPhotography;
             
-            // Update Deal Summary
-            const allInCost = purchasePrice + actualRenoCost + permits + closingCosts + totalHoldingCosts + 
-                            (useContingencies ? purchaseContingency : 0);
-            const ltv = (loanAmount / arv) * 100;
-            const allInPercent = (allInCost / arv) * 100;
+            // Calculate totals
+            const totalCost = partnerAInvestment + partnerBInvestment + sharedCosts + totalSellingCosts;
+            const netProceeds = salePrice - totalSellingCosts;
             
-            // Get down payment percent for display
-            const downPaymentPercent = lenderType === 'hardmoney' ? 
-                (parseFloat(document.getElementById('downPaymentPercent').value) || 30) : 0;
+            // Calculate profit AFTER returning capital and shared costs
+            const totalProfit = netProceeds - partnerAInvestment - partnerBInvestment - sharedCosts;
             
-            document.getElementById('dealSummary').innerHTML = `
-                <div style="text-align: center;">
-                    <div class="result-label">All-In Cost</div>
-                    <div class="result-value highlight" style="font-size: 1.3rem;">$${allInCost.toFixed(0).toLocaleString()}</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="result-label">ARV</div>
-                    <div class="result-value highlight" style="font-size: 1.3rem;">$${arv.toLocaleString()}</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="result-label">All-In % of ARV</div>
-                    <div class="result-value ${allInPercent < 75 ? 'positive' : 'negative'}" style="font-size: 1.3rem;">${allInPercent.toFixed(1)}%</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="result-label">Cash Required</div>
-                    <div class="result-value" style="font-size: 1.3rem;">$${totalInitialInvestment.toFixed(0).toLocaleString()}</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="result-label">Total Financing</div>
-                    <div class="result-value" style="font-size: 1.3rem;">$${loanAmount.toFixed(0).toLocaleString()}</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="result-label">LTV</div>
-                    <div class="result-value ${ltv < 70 ? 'positive' : ltv < 75 ? '' : 'negative'}" style="font-size: 1.3rem;">${ltv.toFixed(1)}%</div>
-                </div>
-            `;
+            // Calculate profit shares
+            const partnerAProfit = totalProfit * partnerASplit;
+            const partnerBProfit = totalProfit * partnerBSplit;
             
-            // Update Initial Costs Display
-            let initialCostsHTML = `
-                <div class="result-item" style="background: #f0f9ff; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
-                    <span class="result-label" style="font-weight: 700;">Down Payment ${lenderType === 'hardmoney' ? '(' + downPaymentPercent + '% of purchase)' : ''}</span>
-                    <span class="result-value highlight" style="font-size: 1.1rem;">$${downPayment.toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Lender Fees & Closing</span>
-                    <span class="result-value">$${closingCosts.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Purchase Contingency (${purchaseContingencyPercent}%)</span>
-                    <span class="result-value">$${purchaseContingency.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Reno Reserve (${renoContingencyPercent}%)</span>
-                    <span class="result-value">$${renoContingency.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Permits (NJ)</span>
-                    <span class="result-value">$${permits.toLocaleString()}</span>
-                </div>
-                <div class="result-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 10px;">
-                    <span class="result-label"><strong>Total Cash Needed</strong></span>
-                    <span class="result-value highlight"><strong>$${totalInitialInvestment.toFixed(0).toLocaleString()}</strong></span>
-                </div>
-                <div class="info" style="margin-top: 15px;">
-                    <strong>Note:</strong> Purchase contingency covers closing overruns. Reno reserve is for unexpected renovation costs.
-                </div>
-            `;
+            // Calculate total payouts (investment + profit)
+            // Note: Shared costs come out of profit, not added back to partners
+            const partnerAPayout = partnerAInvestment + partnerAProfit;
+            const partnerBPayout = partnerBInvestment + partnerBProfit;
             
-            document.getElementById('initialCosts').innerHTML = initialCostsHTML;
+            // Calculate ROI
+            const partnerAROI = (partnerAProfit / partnerAInvestment) * 100;
+            const partnerBROI = (partnerBProfit / partnerBInvestment) * 100;
             
-            // Update Monthly Payments
-            let paymentsHTML = `
-                <div class="result-item">
-                    <span class="result-label">Loan Interest Payment</span>
-                    <span class="result-value">$${constructionPayment.toFixed(0).toLocaleString()}/mo</span>
-                </div>
-            `;
+            // Update UI
+            document.getElementById('totalProfit').textContent = formatCurrency(totalProfit);
+            document.getElementById('totalProfit').className = 'result-value ' + (totalProfit >= 0 ? 'positive' : 'negative');
             
-            if (lenderType === 'hardmoney') {
-                paymentsHTML = `
-                    <div class="result-item">
-                        <span class="result-label">During Construction</span>
-                        <span class="result-value">$${constructionPayment.toFixed(0).toLocaleString()}/mo</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">After Construction</span>
-                        <span class="result-value">$${fullLoanPayment.toFixed(0).toLocaleString()}/mo</span>
-                    </div>
-                `;
-            }
+            document.getElementById('partnerATotal').textContent = formatCurrency(partnerAInvestment);
+            document.getElementById('partnerBTotal').textContent = formatCurrency(partnerBInvestment);
+            document.getElementById('totalCost').textContent = formatCurrency(totalCost);
+            document.getElementById('netProceeds').textContent = formatCurrency(netProceeds);
             
-            paymentsHTML += `
-                <div class="result-item">
-                    <span class="result-label">Property Tax (NJ)</span>
-                    <span class="result-value">$${(propertyTax / (constructionMonths + holdingMonths)).toFixed(0).toLocaleString()}/mo</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Insurance</span>
-                    <span class="result-value">$${monthlyInsurance.toLocaleString()}/mo</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Utilities</span>
-                    <span class="result-value">$${(utilities / (constructionMonths + holdingMonths)).toFixed(0).toLocaleString()}/mo</span>
-                </div>
-                <div class="result-item" style="border-top: 1px solid #e2e8f0; margin-top: 10px; padding-top: 10px;">
-                    <span class="result-label"><strong>Total Interest Paid</strong></span>
-                    <span class="result-value negative"><strong>$${totalInterestPaid.toFixed(0).toLocaleString()}</strong></span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label"><strong>Total Holding Costs</strong></span>
-                    <span class="result-value negative"><strong>$${totalHoldingCosts.toFixed(0).toLocaleString()}</strong></span>
-                </div>
-            `;
+            // Partner A
+            document.getElementById('partnerAInvestment').textContent = formatCurrency(partnerAInvestment);
+            document.getElementById('partnerAProfit').textContent = formatCurrency(partnerAProfit);
+            document.getElementById('partnerAPayout').textContent = formatCurrency(partnerAPayout);
+            document.getElementById('partnerAROI').textContent = partnerAROI.toFixed(1) + '% ROI';
+            document.getElementById('partnerAROI').className = 'roi-value ' + (partnerAROI >= 0 ? 'positive' : 'negative');
             
-            document.getElementById('monthlyPayments').innerHTML = paymentsHTML;
+            // Partner B
+            document.getElementById('partnerBInvestment').textContent = formatCurrency(partnerBInvestment);
+            document.getElementById('partnerBProfit').textContent = formatCurrency(partnerBProfit);
+            document.getElementById('partnerBPayout').textContent = formatCurrency(partnerBPayout);
+            document.getElementById('partnerBROI').textContent = partnerBROI.toFixed(1) + '% ROI';
+            document.getElementById('partnerBROI').className = 'roi-value ' + (partnerBROI >= 0 ? 'positive' : 'negative');
             
-            // Flip to Sell Analysis
-            const salePrice = parseFloat(document.getElementById('salePrice').value) || arv;
-            const realtorCommission = parseFloat(document.getElementById('realtorCommission').value) || 5;
-            const njTransferTax = parseFloat(document.getElementById('njTransferTax').value) || 1;
-            const includeStaging = document.getElementById('includeStaging').checked;
+            // Show results
+            document.getElementById('results').classList.add('show');
             
-            const realtorFees = salePrice * (realtorCommission / 100);
-            const transferTaxAmount = salePrice * (njTransferTax / 100);
-            const stagingCosts = includeStaging ? 3000 : 0;
-            const attorneyFees = 1500; // NJ attorney fees
-            const sellerClosingCosts = 2500; // Other NJ closing costs
-            
-            // Calculate profit scenarios
-            const baseProfit = salePrice - purchasePrice - renobudget - permits - 
-                             closingCosts - totalHoldingCosts - realtorFees - transferTaxAmount - 
-                             stagingCosts - attorneyFees - sellerClosingCosts;
-            
-            const withPurchaseContingency = baseProfit - purchaseContingency;
-            const withRenoContingency = baseProfit - renoContingency;
-            const withAllContingencies = baseProfit - purchaseContingency - renoContingency;
-            
-            // Determine which profit to display based on toggle
-            const displayProfit = useContingencies ? withAllContingencies : baseProfit;
-            
-            const actualCashInvested = totalInitialInvestment;
-            const roi = (displayProfit / actualCashInvested) * 100;
-            const totalMonths = constructionMonths + holdingMonths;
-            const annualizedROI = (roi / totalMonths) * 12;
-            
-            document.getElementById('flipToSellResults').innerHTML = `
-                <div class="result-item">
-                    <span class="result-label">Sale Price</span>
-                    <span class="result-value positive">$${salePrice.toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Purchase Price</span>
-                    <span class="result-value negative">-$${purchasePrice.toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Renovation (${useContingencies ? 'w/ reserve' : 'base only'})</span>
-                    <span class="result-value negative">-$${actualRenoCost.toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Permits & Financing</span>
-                    <span class="result-value negative">-$${(permits + closingCosts).toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Holding Costs</span>
-                    <span class="result-value negative">-$${totalHoldingCosts.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Realtor (${realtorCommission}%)</span>
-                    <span class="result-value negative">-$${realtorFees.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">NJ Transfer Tax (${njTransferTax}%)</span>
-                    <span class="result-value negative">-$${transferTaxAmount.toFixed(0).toLocaleString()}</span>
-                </div>
-                ${includeStaging ? `<div class="result-item">
-                    <span class="result-label">Staging</span>
-                    <span class="result-value negative">-$${stagingCosts.toLocaleString()}</span>
-                </div>` : ''}
-                <div class="result-item">
-                    <span class="result-label">Attorney & Closing (NJ)</span>
-                    <span class="result-value negative">-$${(attorneyFees + sellerClosingCosts).toLocaleString()}</span>
-                </div>
-                ${useContingencies ? `<div class="result-item">
-                    <span class="result-label">Purchase Contingency Used</span>
-                    <span class="result-value negative">-$${purchaseContingency.toFixed(0).toLocaleString()}</span>
-                </div>` : ''}
-                <div class="result-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 10px;">
-                    <span class="result-label"><strong>Net Profit</strong></span>
-                    <span class="result-value ${displayProfit > 0 ? 'positive' : 'negative'}"><strong>$${displayProfit.toFixed(0).toLocaleString()}</strong></span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">ROI on Cash</span>
-                    <span class="result-value ${roi > 0 ? 'positive' : 'negative'}">${roi.toFixed(1)}%</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Annualized ROI</span>
-                    <span class="result-value ${annualizedROI > 0 ? 'positive' : 'negative'}">${annualizedROI.toFixed(1)}%</span>
-                </div>
-            `;
-            
-            // Profit Scenarios
-            document.getElementById('profitScenarios').innerHTML = `
-                <div class="scenario-box">
-                    <h4>🎯 Best Case (Stay on Budget)</h4>
-                    <div class="result-item">
-                        <span class="result-label">No contingencies used</span>
-                        <span class="result-value positive">$${baseProfit.toFixed(0).toLocaleString()}</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">ROI</span>
-                        <span class="result-value positive">${((baseProfit / actualCashInvested) * 100).toFixed(1)}%</span>
-                    </div>
-                </div>
-                
-                <div class="scenario-box" style="background: #fffaf0; border-left-color: #f6ad55;">
-                    <h4>⚠️ Moderate Case (Use Reno Reserve)</h4>
-                    <div class="result-item">
-                        <span class="result-label">With ${renoContingencyPercent}% reno overage</span>
-                        <span class="result-value" style="color: #f6ad55;">$${withRenoContingency.toFixed(0).toLocaleString()}</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">ROI</span>
-                        <span class="result-value" style="color: #f6ad55;">${((withRenoContingency / actualCashInvested) * 100).toFixed(1)}%</span>
-                    </div>
-                </div>
-                
-                <div class="scenario-box" style="background: #fff5f5; border-left-color: #fc8181;">
-                    <h4>😰 Worst Case (All Contingencies)</h4>
-                    <div class="result-item">
-                        <span class="result-label">All reserves used</span>
-                        <span class="result-value ${withAllContingencies > 0 ? '' : 'negative'}">$${withAllContingencies.toFixed(0).toLocaleString()}</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">ROI</span>
-                        <span class="result-value ${withAllContingencies > 0 ? '' : 'negative'}">${((withAllContingencies / actualCashInvested) * 100).toFixed(1)}%</span>
-                    </div>
-                </div>
-                
-                <div class="info" style="margin-top: 15px;">
-                    <strong>💡 Tip:</strong> Always plan for the moderate case. If you hit best case, it's a bonus!
-                </div>
-            `;
-            
-            // Flip to Rent Analysis
-            const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 2200;
-            const refiLTV = parseFloat(document.getElementById('refiLTV').value) || 75;
-            const refiRate = parseFloat(document.getElementById('refiRate').value) || 7.5;
-            const propertyManagement = parseFloat(document.getElementById('propertyManagement').value) || 10;
-            
-            const refiAmount = arv * (refiLTV / 100);
-            const cashOutAtRefi = refiAmount - loanAmount;
-            const refiMonthlyRate = refiRate / 100 / 12;
-            const refiMonthlyPayment = refiAmount * (refiMonthlyRate * Math.pow(1 + refiMonthlyRate, 360)) / 
-                                      (Math.pow(1 + refiMonthlyRate, 360) - 1);
-            
-            const monthlyTaxes = (arv * 0.0249) / 12; // NJ property tax on new value
-            const monthlyManagement = monthlyRent * (propertyManagement / 100);
-            const monthlyMaintenance = monthlyRent * 0.05;
-            const monthlyVacancy = monthlyRent * 0.08;
-            
-            const totalMonthlyExpenses = refiMonthlyPayment + monthlyInsurance + monthlyTaxes + 
-                                        monthlyManagement + monthlyMaintenance + monthlyVacancy;
-            const monthlyCashFlow = monthlyRent - totalMonthlyExpenses;
-            const annualCashFlow = monthlyCashFlow * 12;
-            const moneyLeftInDeal = totalInitialInvestment - cashOutAtRefi;
-            const cashOnCashReturn = moneyLeftInDeal > 0 ? (annualCashFlow / moneyLeftInDeal) * 100 : 0;
-            
-            document.getElementById('flipToRentResults').innerHTML = `
-                <div class="result-item">
-                    <span class="result-label">Refinance Amount (${refiLTV}% LTV)</span>
-                    <span class="result-value">$${refiAmount.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Cash Out at Refi</span>
-                    <span class="result-value positive">$${cashOutAtRefi.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Money Left in Deal</span>
-                    <span class="result-value">$${moneyLeftInDeal.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Monthly Rent</span>
-                    <span class="result-value positive">+$${monthlyRent.toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Monthly P&I</span>
-                    <span class="result-value negative">-$${refiMonthlyPayment.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Monthly Expenses</span>
-                    <span class="result-value negative">-$${(totalMonthlyExpenses - refiMonthlyPayment).toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 10px;">
-                    <span class="result-label"><strong>Monthly Cash Flow</strong></span>
-                    <span class="result-value ${monthlyCashFlow > 0 ? 'positive' : 'negative'}"><strong>$${monthlyCashFlow.toFixed(0).toLocaleString()}</strong></span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Annual Cash Flow</span>
-                    <span class="result-value ${annualCashFlow > 0 ? 'positive' : 'negative'}">$${annualCashFlow.toFixed(0).toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Cash-on-Cash Return</span>
-                    <span class="result-value ${cashOnCashReturn > 0 ? 'positive' : 'negative'}">${cashOnCashReturn.toFixed(1)}%</span>
-                </div>
-            `;
-            
-            // Complete Fee Breakdown
-            document.getElementById('feeBreakdown').innerHTML = `
-                <div class="calculator-grid">
-                    <div class="card">
-                        <h3>Acquisition & Financing</h3>
-                        <div class="result-item">
-                            <span class="result-label">Down Payment</span>
-                            <span class="result-value">$${downPayment.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Lender Fees</span>
-                            <span class="result-value">$${lenderFees.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Other Closing</span>
-                            <span class="result-value">$${(closingCosts - lenderFees).toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Total Financing</span>
-                            <span class="result-value">$${loanAmount.toFixed(0).toLocaleString()}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>Holding Costs (${constructionMonths + holdingMonths} months)</h3>
-                        <div class="result-item">
-                            <span class="result-label">Total Interest</span>
-                            <span class="result-value">$${totalInterestPaid.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Property Tax (NJ)</span>
-                            <span class="result-value">$${propertyTax.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Insurance</span>
-                            <span class="result-value">$${totalInsurance.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Utilities</span>
-                            <span class="result-value">$${utilities.toLocaleString()}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>Renovation Investment</h3>
-                        <div class="result-item">
-                            <span class="result-label">Base Budget</span>
-                            <span class="result-value">$${renobudget.toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Reserve (${renoContingencyPercent}%)</span>
-                            <span class="result-value">$${renoContingency.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">NJ Permits</span>
-                            <span class="result-value">$${permits.toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label"><strong>Total Available</strong></span>
-                            <span class="result-value"><strong>$${(renobudget + renoContingency + permits).toLocaleString()}</strong></span>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>NJ Selling Costs</h3>
-                        <div class="result-item">
-                            <span class="result-label">Realtor</span>
-                            <span class="result-value">$${realtorFees.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Transfer Tax</span>
-                            <span class="result-value">$${transferTaxAmount.toFixed(0).toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Attorney</span>
-                            <span class="result-value">$${attorneyFees.toLocaleString()}</span>
-                        </div>
-                        ${includeStaging ? `<div class="result-item">
-                            <span class="result-label">Staging</span>
-                            <span class="result-value">$${stagingCosts.toLocaleString()}</span>
-                        </div>` : ''}
-                        <div class="result-item">
-                            <span class="result-label">Other Closing</span>
-                            <span class="result-value">$${sellerClosingCosts.toLocaleString()}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label"><strong>Total</strong></span>
-                            <span class="result-value"><strong>$${(realtorFees + transferTaxAmount + attorneyFees + stagingCosts + sellerClosingCosts).toFixed(0).toLocaleString()}</strong></span>
-                        </div>
-                    </div>
-                </div>
-                
-                ${displayProfit < 20000 ? '<div class="warning"><strong>⚠️ Warning:</strong> Net profit is below $20,000. Consider renegotiating purchase price or reducing costs.</div>' : ''}
-                ${roi < 20 ? '<div class="warning"><strong>⚠️ Warning:</strong> ROI is below 20%. This deal may not meet investor thresholds.</div>' : ''}
-                ${monthlyCashFlow < 200 ? '<div class="warning"><strong>⚠️ Warning:</strong> Monthly cash flow for rental is below $200. Consider increasing rent or reducing expenses.</div>' : ''}
-                ${allInPercent > 75 ? '<div class="warning"><strong>⚠️ Warning:</strong> You\'re over 75% ARV. Most lenders prefer 70% or less.</div>' : ''}
-                ${roi > 30 ? '<div class="success"><strong>✅ Great Deal!</strong> ROI exceeds 30%. This appears to be a strong opportunity.</div>' : ''}
-            `;
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
-        function switchTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Remove active from all buttons
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(button => button.classList.remove('active'));
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Activate corresponding button
-            event.target.classList.add('active');
-        }
+        // Calculate on page load with default values
+        window.addEventListener('load', calculate);
         
-        // Initialize calculations on page load
-        window.onload = function() {
-            calculateAll();
-        };
+        // Recalculate when inputs change
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', calculate);
+        });
     </script>
 </body>
 </html>
